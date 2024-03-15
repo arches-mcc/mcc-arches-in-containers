@@ -1,29 +1,30 @@
-FROM ubuntu:22.04
-# Start with Ubuntu 22
-
-USER root
-
-# Do the apt installation also install git
-RUN apt-get update && && apt-get install -y --no-install-recommends \
-    python3.11 \
-    python3.11-dev \
-    python3.11-venv \
-    python3-pip \
-    make software-properties-common \
-    curl \
-    gcc \
-    build-essential \
-    mime-support \
-    libgdal-dev \
-    dos2unix \
-    nano
-RUN apt-get update --fix-missing && apt-get install -y git
-
-
-# Install the postgres client
-RUN apt-get update
-RUN apt-get install -y postgresql-client-14
-
+# FROM ubuntu:22.04
+# # Start with Ubuntu 22
+#
+# USER root
+#
+# # Do the apt installation also install git
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     python3.11 \
+#     python3.11-dev \
+#     python3.11-venv \
+#     python3-pip \
+#     make software-properties-common \
+#     curl \
+#     gcc \
+#     build-essential \
+#     mime-support \
+#     libgdal-dev \
+#     dos2unix \
+#     nano
+# RUN apt-get update --fix-missing && apt-get install -y git
+#
+# # Install the postgres client
+# RUN curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+#     && add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" \
+#     && apt-get update -y \
+#     && apt-get install -y postgresql-client
+#
 FROM python:3.11
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -76,11 +77,12 @@ RUN set -ex \
         libpq-dev \
         mime-support \
         python3-dev \
-        postgresql-client-14 \
+        postgresql-client \
         dos2unix \
     " \
     && apt-get install -y --no-install-recommends curl \
-    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs npm\
+    && npm install -g yarn \
     && curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" \
     && apt-get update -y \
@@ -89,13 +91,12 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends $RUN_DEPS
 
 
-
 # ----------------------------------------------
 # Do installs relating to yarn
 # ----------------------------------------------
 
 # Set environment variables
-ENV NODE_MAJOR=18
+# ENV NODE_MAJOR=18
 
 # Update package lists and install necessary packages
 RUN apt-get update \
@@ -106,24 +107,24 @@ RUN apt-get update \
     && mkdir -p /etc/apt/keyrings
 
 # Add nodesource GPG key
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+# RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 
 # Add nodesource repository
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    && apt-get update
+# RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+#    && apt-get update
 
 # Install Node.js
-RUN apt-get install -y nodejs
+#RUN apt-get install -y nodejs
 
 # Add yarn GPG key
-RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+#RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
 
 # Add yarn repository
-RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update
+#RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list \
+#    && apt-get update
 
 # Install yarn
-RUN apt-get install -y yarn
+#RUN apt-get install -y yarn
 
 # Clean up
 RUN apt-get clean \

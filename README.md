@@ -1,14 +1,18 @@
-# arches-via-docker
+# Arches Project with Docker Compose
+
+This repository is forked from [opencontext/arches-via-docker](https://github.com/opencontext/arches-via-docker)
+
+## arches-via-docker
 Deployment of Arches (archesproject.org) via Docker. We initially developed this repo to simplify and streamline deployment of Arches for use in archaeology and related instruction.
 
 
 
-# Public Web Server and Localhost Deployments
+## Public Web Server and Localhost Deployments
 
 This main goal of this repo is to offer a simple, turnkey approach to deploying HTTPS secured Arches on the Web. However, this branch provides a simple approach to deploying the current stable version of Arches for use on a `localhost` without starting Docker related to Web hosting (Nginx, SSL, etc.). Be sure to leave Arches with the Django `DEBUG` setting as `True`. See below for instructions on creating and editing an `.env` file.
 
 
-# The directories and files
+## The directories and files
 The following lists some information about the contents of this repo and how they fit together:
 
 * `docker-compose.yml`
@@ -27,7 +31,7 @@ The following lists some information about the contents of this repo and how the
     * `webpack_entrypoint.sh` - The `webpack` container is a minimalist container that invokes a docker command on the `arches` container. This command prepares static assets for the Arches frontend by running webpack and collectstatic.
 
 
-## Prerequisites
+### Prerequisites
 
 1. [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) are installed.
 2. You have cloned this repository, and if deployting to a localhost only you use the `local` branch:
@@ -36,7 +40,7 @@ The following lists some information about the contents of this repo and how the
    git checkout origin/local
    ```
 
-### Note:
+#### Note:
 This approach will setup the most current stable version of Arches (now v7.4.2) suitable for running on a localhost for testing purposes. If you want to deploy Arches version 6 (specifically stable version 6.2.4), please switch to the `v6` branch of this repo, with:
    ```bash
    git checkout origin/v6
@@ -48,7 +52,7 @@ If you want to deploy the latest stable version of Arches to a public (or organi
    ```
 
 
-## Step 1 - edit the configuration
+### Step 1 - edit the configuration
 
 Specify you domain names and contact emails for these domains in the `edit_dot_env` file and then save this file as `.env`:
 
@@ -75,13 +79,13 @@ BUILD_PRODUCTION=False
 ```
 
 
-## Step 2 - Build images and start containers
+### Step 2 - Build images and start containers
 
 ```bash
 docker compose up --build
 ```
 
-## Config Changes? - Replace volumes etc to implement changes
+### Config Changes? - Replace volumes etc to implement changes
 
 Stop the containers:
 
@@ -90,7 +94,7 @@ docker compose down
 ```
 
 
-## How to Make Arches (administrative) Management Commands
+### How to Make Arches (administrative) Management Commands
 Currently this will setup an "empty" Arches instance. You'll need to load it with your own data by loading a package or some other approach. Once you deploy Arches, you can use normal Arches management commands as so:
 
 ```bash
@@ -99,7 +103,7 @@ docker exec -it arches python3 manage.py [Arches management commands and argumen
 
 
 
-## NOTE
+### NOTE
 You may run into weirdness permissions issues restarting the docker container. I solved it with:
 ```
 sudo chmod 666 /var/run/docker.sock
@@ -107,7 +111,7 @@ sudo chmod 666 /var/run/docker.sock
 ```
 
 
-# BACKGROUND AND CREDIT
+## BACKGROUND AND CREDIT
 This repo will hopefully streamline deployment of Arches for use on the Web. Eventually, we hope to use this as the basis for deploying instances of Arches for use in archaeological teaching and learning applications.
 
 None of this code is very original. This repo started by forking:

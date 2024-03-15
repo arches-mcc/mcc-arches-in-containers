@@ -1,7 +1,7 @@
 # Edit this file and save as ".env" for use.
 
 COMPOSE_PROJECT_NAME=arches_slocal
-TZ=PST
+TZ=America/Torontov
 
 #arches project and paths
 ARCHES_PROJECT=arches_slocal

@@ -4,7 +4,7 @@ services:
 
   arches_db:
     container_name: arches_db
-    image: postgis/postgis:14-3.2
+    image: postgis/postgis:16-3.4-alpine
     env_file:
       - ./.env
     environment:
@@ -17,7 +17,7 @@ services:
         - postgres-data:/var/lib/postgresql/data/
         - postgres-log:/var/log/postgresql
         - ./init-unix.sql:/docker-entrypoint-initdb.d/init.sql # to set up the DB template
-        - ../arches_data/:/arches_data
+        # - ./arches/arches_data/:/arches_data
     ports:
       - '5434:5432'
     logging:
@@ -30,7 +30,7 @@ services:
 
   arches_elasticsearch:
     container_name: arches_elasticsearch
-    image: elasticsearch:8.5.3
+    image: elasticsearch:8.12.2
     restart: always
     env_file:
       - ./.env
@@ -54,7 +54,7 @@ services:
 
   arches_redis:
     container_name: arches_redis
-    image: "redis:6-alpine"
+    image: "redis:7-alpine"
     restart: always
     ports:
       - "6379:6379"
@@ -104,7 +104,7 @@ services:
       - arches-log:/web_root/logs
       - arches-static:/static_root
       - arches-app:/arches_app
-      - ../arches_data/:/arches_data
+      # - ./arches/arches_data/:/arches_data
     logging:
       driver: "json-file"
       options:
