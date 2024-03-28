@@ -1,9 +1,13 @@
-# arches-via-docker
+# Arches Project with Docker Compose
+
+This repository is forked from [opencontext/arches-via-docker](https://github.com/opencontext/arches-via-docker)
+
+## arches-via-docker
 Deployment of Arches (archesproject.org) via Docker. We initially developed this repo to simplify and streamline deployment of Arches for use in archaeology and related instruction.
 
 
 
-# Public Web Server and Localhost Deployments
+## Public Web Server and Localhost Deployments
 
 This main goal of this repo is to offer a simple, turnkey approach to deploying HTTPS secured Arches on the Web. You can also use this to deploy the current stable version of Arches for use on a `localhost` by leaving Arches with the Django `DEBUG` setting as `True`. See below for instructions on creating and editing an `.env` file.
 
@@ -17,7 +21,7 @@ If you're interested in testing a `localhost` (only) deployment of Arches for Sc
    ```
 
 
-# Nginx and Let’s Encrypt with Docker Compose in less than 3 minutes
+## Nginx and Let’s Encrypt with Docker Compose in less than 3 minutes
 
 This approach automatically obtains and renews [Let's Encrypt](https://letsencrypt.org/) TLS certificates and set up HTTPS in Nginx for your domain name using Docker Compose.
 
@@ -43,7 +47,7 @@ The sequence of actions:
 * The Nginx container uses updates symbolic links that point to either "dummy" certificates or Let's Encrypt certificates.
 
 
-# The directories and files
+## The directories and files
 The following lists some information about the contents of this repo and how they fit together:
 
 * `docker-compose.yml`
@@ -94,7 +98,7 @@ Configuration parameters:
 Let's Encrypt has rate limits. So, while testing it's better to use staging server by setting `CERTBOT_TEST_CERT=1` (default value).
 When you are ready to use production Let's Encrypt server, set `CERTBOT_TEST_CERT=0`.
 
-## Prerequisites
+### Prerequisites
 
 1. [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) are installed.
 2. You have a domain name
@@ -104,18 +108,18 @@ When you are ready to use production Let's Encrypt server, set `CERTBOT_TEST_CER
    git clone https://github.com/opencontext/arches-via-docker.git
    ```
 
-### Note:
+#### Note:
 This approach will setup the most current stable version of Arches (now v7.5.0). If you want to deploy Arches version 6 (specifically stable version 6.2.6), please switch to the `v6` branch of this repo, with:
    ```bash
    git checkout origin/v6
    ```
 
 
-## Step 0 - Point your domain to server with DNS A records
+### Step 0 - Point your domain to server with DNS A records
 
 For all domain names configure DNS A records to point to a server where Docker containers will be running.
 
-## Step 1 - Edit domain names, emails and other variables in the configuration
+### Step 1 - Edit domain names, emails and other variables in the configuration
 
 Specify you domain names and contact emails for these domains in the `edit_dot_env` file and then save this file as `.env`:
 
@@ -149,7 +153,7 @@ BUILD_PRODUCTION=False
 
 
 
-## Step 2 - Create named Docker volumes for dummy and Let's Encrypt TLS certificates
+### Step 2 - Create named Docker volumes for dummy and Let's Encrypt TLS certificates
 
 ```bash
 docker volume create --name=logs_nginx
@@ -158,20 +162,20 @@ docker volume create --name=certbot_certs
 docker volume create --name=arches_certbot
 ```
 
-## Step 3 - Use Valid Let's Encrypt Certificates
+### Step 3 - Use Valid Let's Encrypt Certificates
 Configure to use production Let's Encrypt server in `.env`:
 
 ```properties
 CERTBOT_TEST_CERT=0
 ```
 
-## Step 4 - Build images and start containers
+### Step 4 - Build images and start containers
 
 ```bash
 docker compose up --build
 ```
 
-## Config Changes? - Replace volumes etc to implement changes
+### Config Changes? - Replace volumes etc to implement changes
 
 Stop the containers:
 
@@ -194,7 +198,7 @@ Start the containers:
 docker compose up
 ```
 
-## How to Make Arches (administrative) Management Commands
+### How to Make Arches (administrative) Management Commands
 Besides setting up HTTPS and Nginx, this repo deploys an instance of Arches. Currently this will setup an "empty" Arches instance. You'll need to load it with your own data by loading a package or some other approach. Once you deploy Arches, you can use normal Arches management commands as so:
 
 ```bash
@@ -203,7 +207,7 @@ docker exec -it arches python3 manage.py [Arches management commands and argumen
 
 
 
-## NOTE
+### NOTE
 You may run into weirdness permissions issues restarting the docker container. I solved it with:
 ```
 sudo chmod 666 /var/run/docker.sock
@@ -211,7 +215,7 @@ sudo chmod 666 /var/run/docker.sock
 ```
 
 
-# BACKGROUND AND CREDIT
+## BACKGROUND AND CREDIT
 This repo will hopefully streamline deployment of Arches for use on the Web. Eventually, we hope to use this as the basis for deploying instances of Arches for use in archaeological teaching and learning applications.
 
 None of this code is very original. This repo started by forking:
