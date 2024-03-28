@@ -41,9 +41,9 @@ services:
       - "ES_JAVA_OPTS=-Xms400m -Xmx400m"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - "9202:9200"
-      - "9302:9300"
+    # ports:
+    #   - "9202:9200"
+    #   - "9302:9300"
     logging:
       driver: "json-file"
       options:
@@ -56,8 +56,8 @@ services:
     container_name: arches_redis
     image: "redis:7-alpine"
     restart: always
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
     volumes:
       - "redisdata:/data"
     command: "redis-server"
@@ -88,18 +88,18 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     ports:
-      - "5432:5432"
+      # - "5432:5432"
       - 8004:8000
-      - 5678:5678
-      - 5984:5984
+      # - 5678:5678
+      # - 5984:5984
     depends_on:
       - arches_db
       - arches_elasticsearch
       - arches_redis
     command:
       - run_arches
-    expose:
-      - 8004:8000
+    # expose:
+    #   - 8004:8000
     volumes:
       - arches-log:/web_root/logs
       - arches-static:/static_root
